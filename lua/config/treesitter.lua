@@ -1,0 +1,50 @@
+local M = {}
+
+local parser_packages = {
+  "javascript",
+  "html",
+  "css",
+  "markdown",
+  "markdown_inline",
+}
+
+local inherited_query_packages = {
+  "ecma",
+  "jsx",
+  "html_tags",
+}
+
+function M.setup()
+  local missing = vim.tbl_filter(function(language)
+    local ok, loaded = pcall(vim.treesitter.language.add, language)
+    return not ok or not loaded
+  end, parser_packages)
+
+  for _, package_name in ipairs(inherited_query_packages) do
+    local path = ("queries/%s/highlights.scm"):format(package_name)
+    if #vim.api.nvim_get_runtime_file(path, false) == 0 then
+      table.insert(missing, package_name)
+    end
+  end
+
+  if #missing == 0 then
+    return
+  end
+
+  local installed = require("nvim-treesitter").install(missing):wait(300000)
+  if not installed then
+    vim.notify(
+      ("Failed to install Tree-sitter packages: %s"):format(
+        table.concat(missing, ", ")
+      ),
+      vim.log.levels.ERROR
+    )
+  end
+
+  -- Clear any query lookup memoized before the new runtime files existed.
+  if type(vim.treesitter.query.get.clear) == "function" then
+    vim.treesitter.query.get:clear()
+  end
+end
+
+return M
