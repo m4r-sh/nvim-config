@@ -29,6 +29,11 @@ local function specs()
     },
     argiope_spec(),
     {
+      src = "https://github.com/nvim-mini/mini.icons",
+      name = "mini.icons",
+      version = vim.version.range("0.17"),
+    },
+    {
       src = "https://github.com/folke/snacks.nvim",
       name = "snacks.nvim",
       version = vim.version.range("2.x"),
@@ -92,17 +97,27 @@ function M.setup()
     load = load_plugin,
   })
 
+  require("mini.icons").setup()
   require("snacks").setup({
     explorer = {
       enabled = true,
-      replace_netrw = false,
+      replace_netrw = true,
     },
     picker = {
       enabled = true,
+      sources = {
+        explorer = {
+          formatters = {
+            file = {
+              git_status_hl = false,
+            },
+          },
+        },
+      },
     },
   })
   require("oil").setup({
-    default_file_explorer = true,
+    default_file_explorer = false,
     view_options = {
       show_hidden = true,
     },

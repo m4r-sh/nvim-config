@@ -20,10 +20,15 @@ function M.setup(options)
   map("n", "<leader>q", "<Cmd>confirm quit<CR>", "Quit window")
   map("n", "[b", "<Cmd>bprevious<CR>", "Previous buffer")
   map("n", "]b", "<Cmd>bnext<CR>", "Next buffer")
+  map("n", "<leader>bb", "<Cmd>bprevious<CR>", "Previous buffer")
   map("n", "<leader>bd", "<Cmd>bdelete<CR>", "Delete buffer")
   map("n", "<Esc>", "<Cmd>nohlsearch<CR>", "Clear search highlight")
+  map("x", "p", "P", "Paste without replacing default register")
   map("n", "<leader>hi", "<Cmd>Inspect<CR>", "Inspect highlight captures")
   map("n", "<leader>ht", "<Cmd>InspectTree<CR>", "Inspect Tree-sitter tree")
+  map("n", "<leader>zt", function()
+    require("argiope").toggle_theme()
+  end, "Toggle Argiope JavaScript colors")
 
   if not options.plugins then
     return
@@ -58,6 +63,9 @@ function M.setup(options)
 
   local function map_template_textobjects(bufnr)
     local options = { buffer = bufnr }
+    map("x", "<leader>zc", function()
+      require("argiope").toggle_interpolation_selection(bufnr)
+    end, "Toggle template interpolation comment", options)
     map(
       { "x", "o" },
       "i`",

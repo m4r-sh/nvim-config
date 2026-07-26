@@ -1,13 +1,18 @@
 {
   "plugins": {
     "argiope.nvim": {
-      "rev": "f699b7aee8ddefce9b0b11441bc2e48e83fb6907",
+      "rev": "c69465ae165aaff5cacd9917101975634c4b3b0e",
       "src": "https://github.com/m4r-sh/argiope.nvim"
     },
     "fff.nvim": {
-      "rev": "686a84959ddc72185a7cacaf00145af5ccac7a83",
+      "rev": "fde8c52a298a2fa4375edf626e0c37b0400f5a8b",
       "src": "https://github.com/dmtrKovalenko/fff.nvim",
       "version": "0.10.0 - 0.11.0"
+    },
+    "mini.icons": {
+      "rev": "ff2e4f1d29f659cc2bad0f9256f2f6195c6b2428",
+      "src": "https://github.com/nvim-mini/mini.icons",
+      "version": "0.17.0 - 0.18.0"
     },
     "nvim-surround": {
       "rev": "2e93e154de9ff326def6480a4358bfc149d5da2c",

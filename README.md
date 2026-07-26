@@ -16,6 +16,7 @@ packages. Later startups reuse the lockfile and installed packages.
 ## Included plugins
 
 - `m4r-sh/argiope.nvim` for JavaScript tagged-template highlighting, indentation, and the Argiope colorscheme
+- `mini.icons` for filetype-aware icons in Snacks Explorer and other pickers
 - the current nvim-treesitter parser registry and runtime
 - Snacks Explorer on `<leader>e`
 - `oil.nvim` on `-` for editable directory buffers
@@ -50,6 +51,8 @@ working tree directly into `runtimepath`.
 | `[b` / `]b` | Previous / next buffer |
 | `<Space>bd` | Delete the current buffer |
 | `<Esc>` | Clear search highlighting |
+| `<Space>zt` | Toggle JavaScript between monochrome and Dracula syntax colors |
+| `<Space>zc` in Visual mode | Toggle the selected template text as an empty-interpolation comment |
 
 Picker-local mappings take precedence while a picker is focused, so `<C-s>`
 continues to mean “open in a horizontal split” inside fff and Snacks.
@@ -74,6 +77,10 @@ Useful Snacks Explorer keys:
 | `H` | Toggle hidden files |
 | `I` | Toggle ignored files |
 | `u` | Refresh |
+
+Snacks shows `?` for Git-untracked files. The explorer keeps that status
+indicator visible without dimming the entire filename, and `mini.icons`
+provides filetype-specific icons.
 
 Oil buffers remain editable directories: rename, create, move, or delete
 entries by editing lines, then use `:write` to apply the changes.
@@ -113,6 +120,12 @@ Inside an fff picker:
 | `` di` `` / `` da` `` | Delete inside / around a JavaScript template literal |
 
 The backtick text objects are Tree-sitter-aware and work across lines.
+In a JavaScript template, visually select text and press `<Space>zc` to wrap
+that exact range as `${''/* ... */}`. Characterwise selections can cover part
+of one line or span lines; Visual Line mode continues to wrap each selected
+line. Selecting exactly `value` inside `${value}`, or the whole
+interpolation, changes it to `${''/* value */}` instead of nesting another
+interpolation.
 
 ## Inspection and maintenance
 

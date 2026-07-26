@@ -25,5 +25,5 @@ vim.opt.breakindent = true
 vim.opt.showbreak = "↳ "
 
 if vim.uv.os_uname().sysname == "Darwin" then
-  vim.opt.clipboard:append("unnamedplus")
+   vim.opt.clipboard:append("unnamedplus")
 end
