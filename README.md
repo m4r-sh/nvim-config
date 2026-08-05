@@ -12,6 +12,7 @@ packages. Later startups reuse the lockfile and installed packages.
 - Neovim 0.12+
 - Git and curl
 - Tree-sitter CLI 0.26.1+
+- `typescript-language-server` and `typescript` for JavaScript navigation
 
 ## Included plugins
 
@@ -51,11 +52,35 @@ working tree directly into `runtimepath`.
 | `[b` / `]b` | Previous / next buffer |
 | `<Space>bd` | Delete the current buffer |
 | `<Esc>` | Clear search highlighting |
+| `j` / `k` | Move by display line when text wraps; counts still move by file line |
+| `gd` in JavaScript | Go to definition |
+| `<C-l>` in JavaScript Insert mode | Toggle SuperTab completion |
 | `<Space>zt` | Toggle JavaScript between monochrome and Dracula syntax colors |
 | `<Space>zc` in Visual mode | Toggle the selected template text as an empty-interpolation comment |
 
 Picker-local mappings take precedence while a picker is focused, so `<C-s>`
 continues to mean “open in a horizontal split” inside fff and Snacks.
+New lines do not inherit a comment leader automatically; add one explicitly
+when continuing a comment.
+
+## JavaScript language support
+
+The native Neovim LSP client uses `typescript-language-server` for JavaScript
+and JSX buffers only. Its TypeScript engine supplies JavaScript code
+intelligence and browser API definitions, but TypeScript buffers are not
+enabled.
+
+Diagnostics, semantic-token highlighting, and LSP formatting are disabled.
+Completion starts quiet. Press `<C-l>` to toggle SuperTab mode for the
+current Neovim session. While enabled, suggestions appear automatically as
+you type; `<Tab>` advances to the next result and `<S-Tab>` moves backward.
+Accepting a function can fill its call and parameter placeholders, and
+signature help appears while entering its arguments. `<Tab>` and `<S-Tab>`
+move through those placeholders when appropriate and retain their normal
+behavior when SuperTab is disabled. Turning SuperTab off closes open
+completion and signature-help popups. Use `<C-y>` to accept an item or
+`<C-e>` to close the completion menu. Neovim's standard `<C-x><C-o>`
+sequence remains available as a fallback.
 
 ## Files
 

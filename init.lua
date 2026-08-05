@@ -19,3 +19,4 @@ vim.cmd.colorscheme("argiope")
 require("config.keymaps").setup({
   plugins = true,
 })
+require("config.lsp").setup()

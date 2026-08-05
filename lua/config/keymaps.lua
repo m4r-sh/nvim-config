@@ -23,6 +23,12 @@ function M.setup(options)
   map("n", "<leader>bb", "<Cmd>bprevious<CR>", "Previous buffer")
   map("n", "<leader>bd", "<Cmd>bdelete<CR>", "Delete buffer")
   map("n", "<Esc>", "<Cmd>nohlsearch<CR>", "Clear search highlight")
+  map("n", "j", function()
+    return vim.v.count == 0 and "gj" or "j"
+  end, "Move down by display line", { expr = true })
+  map("n", "k", function()
+    return vim.v.count == 0 and "gk" or "k"
+  end, "Move up by display line", { expr = true })
   map("x", "p", "P", "Paste without replacing default register")
   map("n", "<leader>hi", "<Cmd>Inspect<CR>", "Inspect highlight captures")
   map("n", "<leader>ht", "<Cmd>InspectTree<CR>", "Inspect Tree-sitter tree")
