@@ -12,6 +12,68 @@ local function map(mode, lhs, rhs, description, options)
   )
 end
 
+local function escape_markdown_template_syntax()
+  local bufnr = vim.api.nvim_get_current_buf()
+  local first = vim.api.nvim_buf_get_mark(bufnr, "<")
+  local last = vim.api.nvim_buf_get_mark(bufnr, ">")
+  local mode = vim.fn.visualmode()
+
+  if first[1] == 0 or last[1] == 0 then
+    return
+  end
+
+  local function escape(text)
+    return text:gsub("%${", "\\${"):gsub("`", "\\`")
+  end
+
+  if mode == "\22" then
+    local first_column = math.min(first[2], last[2])
+    local last_column = math.max(first[2], last[2])
+
+    for row = math.min(first[1], last[1]), math.max(first[1], last[1]) do
+      local line = vim.api.nvim_buf_get_lines(bufnr, row - 1, row, false)[1]
+      local start_column = math.min(first_column, #line)
+      local end_column = math.min(last_column + 1, #line)
+
+      vim.api.nvim_buf_set_text(
+        bufnr,
+        row - 1,
+        start_column,
+        row - 1,
+        end_column,
+        { escape(line:sub(start_column + 1, end_column)) }
+      )
+    end
+    return
+  end
+
+  local start_row = math.min(first[1], last[1]) - 1
+  local end_row = math.max(first[1], last[1]) - 1
+  local start_column = first[1] <= last[1] and first[2] or last[2]
+  local end_column = first[1] <= last[1] and last[2] or first[2]
+
+  if mode == "V" then
+    start_column = 0
+    end_column = #vim.api.nvim_buf_get_lines(bufnr, end_row, end_row + 1, false)[1]
+  elseif vim.o.selection ~= "exclusive" then
+    local line = vim.api.nvim_buf_get_lines(bufnr, end_row, end_row + 1, false)[1]
+    end_column = vim.str_byteindex(line, vim.str_utfindex(line, end_column) + 1)
+  end
+
+  local selection = vim.api.nvim_buf_get_text(
+    bufnr,
+    start_row,
+    start_column,
+    end_row,
+    end_column,
+    {}
+  )
+  for index, line in ipairs(selection) do
+    selection[index] = escape(line)
+  end
+  vim.api.nvim_buf_set_text(bufnr, start_row, start_column, end_row, end_column, selection)
+end
+
 function M.setup(options)
   options = options or {}
 
@@ -32,9 +94,7 @@ function M.setup(options)
   map("x", "p", "P", "Paste without replacing default register")
   map("n", "<leader>hi", "<Cmd>Inspect<CR>", "Inspect highlight captures")
   map("n", "<leader>ht", "<Cmd>InspectTree<CR>", "Inspect Tree-sitter tree")
-  map("n", "<leader>zt", function()
-    require("argiope").toggle_theme()
-  end, "Toggle Argiope JavaScript colors")
+  map("x", "<leader>ze", escape_markdown_template_syntax, "Escape JavaScript for Markdown template")
 
   if not options.plugins then
     return
@@ -50,6 +110,12 @@ function M.setup(options)
   map("n", "<leader>fg", function()
     require("fff").live_grep()
   end, "Live grep")
+  map("n", "<leader>zt", function()
+    Snacks.picker.colorschemes({ pattern = "argiope-" })
+  end, "Argiope themes")
+  map("n", "<leader>uC", function()
+    Snacks.picker.colorschemes()
+  end, "Colorschemes")
   map({ "n", "x" }, "<leader>fw", function()
     require("fff").live_grep_under_cursor()
   end, "Search word or selection")

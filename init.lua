@@ -15,7 +15,7 @@ vim.cmd("filetype plugin indent on")
 require("config.treesitter").setup()
 plugins.load_argiope()
 require("argiope").setup()
-vim.cmd.colorscheme("argiope")
+vim.cmd.colorscheme("argiope-aurantia")
 require("config.keymaps").setup({
   plugins = true,
 })

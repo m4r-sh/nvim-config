@@ -55,8 +55,10 @@ working tree directly into `runtimepath`.
 | `j` / `k` | Move by display line when text wraps; counts still move by file line |
 | `gd` in JavaScript | Go to definition |
 | `<C-l>` in JavaScript Insert mode | Toggle SuperTab completion |
-| `<Space>zt` | Toggle JavaScript between monochrome and Dracula syntax colors |
 | `<Space>zc` in Visual mode | Toggle the selected template text as an empty-interpolation comment |
+| `<Space>ze` in Visual mode | Escape JavaScript template syntax for embedding in a Markdown template |
+| `<Space>zt` | Choose an Argiope theme with live preview |
+| `<Space>uC` | Choose a colorscheme with live preview |
 
 Picker-local mappings take precedence while a picker is focused, so `<C-s>`
 continues to mean “open in a horizontal split” inside fff and Snacks.
@@ -151,6 +153,10 @@ of one line or span lines; Visual Line mode continues to wrap each selected
 line. Selecting exactly `value` inside `${value}`, or the whole
 interpolation, changes it to `${''/* value */}` instead of nesting another
 interpolation.
+
+To put JavaScript containing template literals inside an `md` template, select
+the JavaScript source and press `<Space>ze`. It replaces `${` with `\${` and
+each backtick with `\`` so the surrounding Markdown template remains intact.
 
 ## Inspection and maintenance
 
