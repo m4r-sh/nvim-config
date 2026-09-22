@@ -20,12 +20,9 @@ end
 local function specs()
   return {
     {
-      src = "https://github.com/neovim-treesitter/treesitter-parser-registry",
-      name = "treesitter-parser-registry",
-    },
-    {
-      src = "https://github.com/neovim-treesitter/nvim-treesitter",
+      src = "https://github.com/nvim-treesitter/nvim-treesitter",
       name = "nvim-treesitter",
+      version = "main",
     },
     argiope_spec(),
     {
@@ -81,6 +78,21 @@ local function load_plugin(plugin)
 end
 
 function M.setup()
+  local treesitter_group = vim.api.nvim_create_augroup("config_treesitter_update", { clear = true })
+  vim.api.nvim_create_autocmd("PackChanged", {
+    group = treesitter_group,
+    callback = function(event)
+      if event.data.spec.name == "nvim-treesitter"
+        and (event.data.kind == "install" or event.data.kind == "update") then
+        if not event.data.active then
+          vim.cmd.packadd("nvim-treesitter")
+        end
+        require("nvim-treesitter").update():wait(300000)
+      end
+    end,
+    desc = "Update Tree-sitter parsers after plugin changes",
+  })
+
   local group = vim.api.nvim_create_augroup("config_fff_build", { clear = true })
   vim.api.nvim_create_autocmd("PackChanged", {
     group = group,
@@ -114,6 +126,9 @@ function M.setup()
           },
         },
       },
+    },
+    image = {
+      enabled = true,
     },
   })
   require("oil").setup({

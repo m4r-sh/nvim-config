@@ -4,6 +4,8 @@ local parser_packages = {
   "javascript",
   "html",
   "css",
+  "glsl",
+  "wgsl",
   "markdown",
   "markdown_inline",
 }
@@ -14,7 +16,28 @@ local inherited_query_packages = {
   "html_tags",
 }
 
+local native_shader_languages = {
+  glsl = "glsl",
+  wgsl = "wgsl",
+}
+
+local function setup_native_shader_highlighting()
+  local group = vim.api.nvim_create_augroup("config_treesitter_shaders", {
+    clear = true,
+  })
+  vim.api.nvim_create_autocmd("FileType", {
+    group = group,
+    pattern = vim.tbl_keys(native_shader_languages),
+    callback = function(event)
+      vim.treesitter.start(event.buf, native_shader_languages[event.match])
+    end,
+    desc = "Start Tree-sitter highlighting for native shader buffers",
+  })
+end
+
 function M.setup()
+  setup_native_shader_highlighting()
+
   local missing = vim.tbl_filter(function(language)
     local ok, loaded = pcall(vim.treesitter.language.add, language)
     return not ok or not loaded

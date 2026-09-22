@@ -18,7 +18,7 @@ packages. Later startups reuse the lockfile and installed packages.
 
 - `m4r-sh/argiope.nvim` for JavaScript tagged-template highlighting, indentation, and the Argiope colorscheme
 - `mini.icons` for filetype-aware icons in Snacks Explorer and other pickers
-- the current nvim-treesitter parser registry and runtime
+- upstream `nvim-treesitter/nvim-treesitter` on `main`, with automatic parser updates
 - Snacks Explorer on `<leader>e`
 - `oil.nvim` on `-` for editable directory buffers
 - `fff.nvim` for file finding and live grep
