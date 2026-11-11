@@ -1,21 +1,8 @@
 local M = {}
 
-local default_argiope_source = "https://github.com/m4r-sh/argiope.nvim"
 local deferred_plugins = {
   ["argiope.nvim"] = true,
 }
-
-local function argiope_spec()
-  local source = vim.env.ARGIOPE_NVIM_SOURCE
-  if not source or source == "" then
-    source = default_argiope_source
-  end
-
-  return {
-    src = source,
-    name = "argiope.nvim",
-  }
-end
 
 local function specs()
   return {
@@ -24,7 +11,11 @@ local function specs()
       name = "nvim-treesitter",
       version = "main",
     },
-    argiope_spec(),
+    {
+      src = "https://github.com/m4r-sh/argiope.nvim",
+      name = "argiope.nvim",
+      version = vim.version.range("0.2"),
+    },
     {
       src = "https://github.com/nvim-mini/mini.icons",
       name = "mini.icons",

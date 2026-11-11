@@ -111,7 +111,15 @@ function M.setup(options)
     require("fff").live_grep()
   end, "Live grep")
   map("n", "<leader>zt", function()
-    Snacks.picker.colorschemes({ pattern = "argiope-" })
+    local palette = require("argiope.palette")
+    vim.ui.select(palette.variants(), {
+      prompt = "Argiope themes",
+      format_item = function(name)
+        return name .. (name == palette.current and " (current)" or "")
+      end,
+    }, function(name)
+      if name then require("argiope").set_theme_variant(name) end
+    end)
   end, "Argiope themes")
   map("n", "<leader>uC", function()
     Snacks.picker.colorschemes()

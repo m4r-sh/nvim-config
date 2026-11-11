@@ -25,16 +25,18 @@ packages. Later startups reuse the lockfile and installed packages.
 - `nvim-surround`
 - `nvim-treesitter-textobjects` with multiline template-literal text objects
 
-Argiope follows the repository's default branch so this config works before
-the first release tag. During local plugin development, `ARGIOPE_NVIM_SOURCE`
-can point at another Git URI; for example:
+Argiope is installed from `https://github.com/m4r-sh/argiope.nvim` through
+`vim.pack`, using compatible `0.2.x` release tags. The lockfile records the
+installed revision. Local development checkouts and `ARGIOPE_NVIM_SOURCE` /
+`ARGIOPE_NVIM_RUNTIME` overrides are not used by this configuration.
 
-```sh
-ARGIOPE_NVIM_SOURCE=file:///absolute/path/to/argiope.nvim nvim
+To update the installed release:
+
+```vim
+:lua vim.pack.update({ "argiope.nvim" })
 ```
 
-The override still installs Argiope through `vim.pack`; it does not inject the
-working tree directly into `runtimepath`.
+Review and apply the update, then restart Neovim.
 
 ---
 
@@ -83,6 +85,14 @@ behavior when SuperTab is disabled. Turning SuperTab off closes open
 completion and signature-help popups. Use `<C-y>` to accept an item or
 `<C-e>` to close the completion menu. Neovim's standard `<C-x><C-o>`
 sequence remains available as a fallback.
+
+## Leg edit scripts
+
+When `~/vimote/vimote-neovim-spans` exists, this config loads its optional Leg
+Tree-sitter runtime. Run `bun run build:grammar` there once, then restart Neovim.
+Set `VIMOTE_SOURCE=/path/to/vimote` to use another checkout or installed package.
+The grammar and queries are maintained in Vimote; this config only enables them.
+Argiope also highlights `leg` templates and keeps `${...}` expressions in JavaScript.
 
 ## Files
 

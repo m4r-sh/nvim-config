@@ -38,6 +38,15 @@ end
 function M.setup()
   setup_native_shader_highlighting()
 
+  -- Vimote owns the Leg grammar and queries. Build with `bun run build:grammar`
+  -- in that checkout; no parser build or installation is done during startup.
+  local vimote = vim.env.VIMOTE_SOURCE or vim.fn.expand("~/vimote/vimote-neovim-spans")
+  local runtime = vim.fs.joinpath(vimote, "editors", "neovim")
+  if vim.fn.isdirectory(runtime) == 1 then
+    vim.opt.runtimepath:prepend(runtime)
+    require("vimote.leg").setup()
+  end
+
   local missing = vim.tbl_filter(function(language)
     local ok, loaded = pcall(vim.treesitter.language.add, language)
     return not ok or not loaded
